@@ -1,13 +1,13 @@
-Creating Snake game with Python in the PyGame library.
+#Creating Snake game with Python in the PyGame library.
 
 The complete game in just one code.
 
-Steps:
-    
+#Steps
+
 Create:
-[x]    -Window
-[ ]    -Snake
-[ ]    -Apple
-[ ]    -Score
+- [x] Window
+- [ ] Snake / Movimentation
+- [ ] Apple
+- [ ] Score
 
 Done.
