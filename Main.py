@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 pygame.init() #Starting PyGame
 
@@ -21,6 +21,20 @@ snakePos = [0, 0] #Pos = position
 snakeDir = 5 #Dir = direction
 snakeBodySize = 2
 snakeBody = []
+
+#Apple
+appleSize = 10
+appleColor = (255,0,0)
+applePos = [] #Pos = position
+
+#Generate a random number
+def randomApplePos():
+    a = random.randint(0, 63)
+    b = random.randint(0, 47)
+
+    return [a * 10, b * 10]
+
+applePos = randomApplePos()
 
 def snakeMovimentation():
     if snakeDir == 0:
@@ -50,8 +64,9 @@ while True:
 
     window.fill(background_color) #Painting background color
 
+    #Snake
     snakeBody.append([snakePos[0], snakePos[1]]) #Add the first square to the snake
-    
+
     #Draws the whole body of the snake
     for i in range(len(snakeBody)):
         pygame.draw.rect(window, snakeColor, [snakeBody[i][0], snakeBody[i][1], snakeSize, snakeSize]) #Drawing square (snake) in the screen
@@ -64,6 +79,14 @@ while True:
     #Try removing this code snippet
     if len(snakeBody) > snakeBodySize:
         del snakeBody[0]
+
+    #Apple
+    pygame.draw.rect(window, appleColor, [applePos[0], applePos[1], appleSize, appleSize]) #Drawing square (apple) in the screen
+    
+    #Collision
+    if (snakePos[0] == applePos[0] and snakePos[1] == applePos[1]):
+        applePos = randomApplePos()
+        snakeBodySize += 1        
 
     pygame.time.Clock().tick(FPS) #Set FPS
     pygame.display.update() #Updating screen

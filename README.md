@@ -7,7 +7,7 @@ The complete game in just one code.
 Create:
 - [x] Window
 - [x] Snake / Movimentation
-- [ ] Apple / Collisions
+- [x] Apple / Collisions
 - [ ] Score
 
 Done.
