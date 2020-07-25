@@ -1,4 +1,4 @@
-# Creating Snake game with Python in the PyGame library.
+# Simple Snake game with Python in the PyGame library.
 
 The complete game in just one code.
 
