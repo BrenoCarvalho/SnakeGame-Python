@@ -1,6 +1,6 @@
 # Simple Snake game with Python in the PyGame library.
 
-![SnakeGameGIF](https://user-images.githubusercontent.com/68216918/88472113-10549500-cee6-11ea-83b8-eb00bc12266a.gif)
+![SnakeGameGIF](https://user-images.githubusercontent.com/68216918/88472260-421a2b80-cee7-11ea-9c78-b36b95ae9a96.gif)
 
 The complete game in just one code.
 -----------------------------------
