@@ -8,6 +8,6 @@ Create:
 - [x] Window
 - [x] Snake / Movimentation
 - [x] Apple / Collisions
-- [ ] Score / Game Over
+- [x] Score / Game Over
 
 Done.

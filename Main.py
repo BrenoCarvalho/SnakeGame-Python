@@ -6,6 +6,7 @@ pygame.init() #Starting PyGame
 size = [640, 480]
 background_color = (255,255,255)
 FPS = 20
+game_loop = True
 
 window = pygame.display.set_mode(size) #Set window size
 pygame.display.set_caption("Snake Game") #Set window title
@@ -13,19 +14,23 @@ pygame.display.set_caption("Snake Game") #Set window title
 #Snake
 snakeSize = 10
 snakeColor = (0,0,0) #Black
-snakePos = [0, 0] #Pos = position
 #0 = UP
 #1 = DOWN
 #2 = LEFT
 #3 = RIGHT
 snakeDir = None #Dir = direction
 snakeBodySize = 2
-snakeBody = []
+snakeBody = [[size[0] / 2, size[1] / 2]]
 
 #Apple
 appleSize = 10
 appleColor = (255,0,0)
 applePos = [] #Pos = position
+
+#Score
+score = 0
+font = pygame.font.Font(pygame.font.get_default_font(), 24)
+text = font.render("Score: " + str(score), True, (0,0,0))
 
 #Generate a random number
 def randomApplePos():
@@ -38,20 +43,21 @@ applePos = randomApplePos()
 
 def snakeMovimentation():
     if snakeDir == 0:
-        snakePos[1] -= 10
+        snakeBody[0][1] -= 10
     elif snakeDir == 1:
-        snakePos[1] += 10
+        snakeBody[0][1] += 10
     elif snakeDir == 2:
-        snakePos[0] -= 10
+        snakeBody[0][0] -= 10
     elif snakeDir == 3:
-        snakePos[0] += 10
+        snakeBody[0][0] += 10
 
 #Looping of game
-while True:
+while game_loop:
     for event in pygame.event.get(): #Get PyGame events
         if event.type == pygame.QUIT:
-            quit()
+            game_loop = False
         
+        #Get keyboard events and set the direction of the snake
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP and snakeDir != 1:
                 snakeDir = 0
@@ -64,31 +70,50 @@ while True:
 
     window.fill(background_color) #Painting background color
 
+    window.blit(text, text.get_rect()) #Add score on the screen
+
     #Increasing the size of the snake
     if len(snakeBody) < snakeBodySize:
-        snakeBody.append(snakePos)
+        snakeBody.append(snakeBody[-1])
 
     #Draws the whole body of the snake
-    for i in range(len(snakeBody)):
-        pygame.draw.rect(window, snakeColor, [snakeBody[i][0], snakeBody[i][1], snakeSize, snakeSize]) #Drawing square (snake) in the screen
+    for bodyPart in snakeBody:
+        pygame.draw.rect(window, snakeColor, [bodyPart[0], bodyPart[1], snakeSize, snakeSize]) #Drawing square (snake) in the screen
 
     snakeMovimentation()
-    snakeBody[0][0] = snakePos[0] #Add movement (X) to the snake's head
-    snakeBody[0][1] = snakePos[1] #Add movement (Y) to the snake's head
 
     #Snake body movement
-    for i in range(len(snakeBody) -1, 0, -1):
+    for i in range(len(snakeBody) - 1, 0, -1):
         snakeBody[i] = (snakeBody[i-1][0], snakeBody[i-1][1])
 
     #Apple
     pygame.draw.rect(window, appleColor, [applePos[0], applePos[1], appleSize, appleSize]) #Drawing square (apple) in the screen
     
     #Collision
-    if (snakePos[0] == applePos[0] and snakePos[1] == applePos[1]):
-        applePos = randomApplePos()
+    if (snakeBody[0][0] == applePos[0] and snakeBody[0][1] == applePos[1]):
         snakeBodySize += 1
+        score += 1
+        text = font.render("Score: " + str(score), True, (0,0,0))
         FPS += 1
+        applePos = randomApplePos()
+
+    #If the snake leaves the screen, it shows on the other side
+    if snakeBody[0][0] > 640:
+        snakeBody[0][0] = -10
+    elif snakeBody[0][0] < 0:
+        snakeBody[0][0] = 640
+    elif snakeBody[0][1] > 480:
+        snakeBody[0][1] = -10
+    elif snakeBody[0][1] < 0:
+        snakeBody[0][1] = 480
+
+    #Collision with one's own body
+    for bodyPart in snakeBody[2:]:
+        if snakeBody[0][0] == bodyPart[0] and snakeBody[0][1] == bodyPart[1]:
+            game_loop = False
 
     pygame.time.Clock().tick(FPS) #Set FPS
     pygame.display.update() #Updating screen
-    
+
+pygame.quit()
+quit()
