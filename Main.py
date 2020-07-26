@@ -5,7 +5,7 @@ pygame.init() #Starting PyGame
 #Game settings
 size = [640, 480]
 background_color = (255,255,255)
-FPS = 15
+FPS = 20
 
 window = pygame.display.set_mode(size) #Set window size
 pygame.display.set_caption("Snake Game") #Set window title
@@ -18,7 +18,7 @@ snakePos = [0, 0] #Pos = position
 #1 = DOWN
 #2 = LEFT
 #3 = RIGHT
-snakeDir = 5 #Dir = direction
+snakeDir = None #Dir = direction
 snakeBodySize = 2
 snakeBody = []
 
@@ -64,21 +64,21 @@ while True:
 
     window.fill(background_color) #Painting background color
 
-    #Snake
-    snakeBody.append([snakePos[0], snakePos[1]]) #Add the first square to the snake
+    #Increasing the size of the snake
+    if len(snakeBody) < snakeBodySize:
+        snakeBody.append(snakePos)
 
     #Draws the whole body of the snake
     for i in range(len(snakeBody)):
         pygame.draw.rect(window, snakeColor, [snakeBody[i][0], snakeBody[i][1], snakeSize, snakeSize]) #Drawing square (snake) in the screen
 
     snakeMovimentation()
-    snakeBody[-1][0] = snakePos[0] #Add movement (X) to the snake's head
-    snakeBody[-1][1] = snakePos[1] #Add movement (Y) to the snake's head
+    snakeBody[0][0] = snakePos[0] #Add movement (X) to the snake's head
+    snakeBody[0][1] = snakePos[1] #Add movement (Y) to the snake's head
 
-    #Limits the snake to grow infinitely
-    #Try removing this code snippet
-    if len(snakeBody) > snakeBodySize:
-        del snakeBody[0]
+    #Snake body movement
+    for i in range(len(snakeBody) -1, 0, -1):
+        snakeBody[i] = (snakeBody[i-1][0], snakeBody[i-1][1])
 
     #Apple
     pygame.draw.rect(window, appleColor, [applePos[0], applePos[1], appleSize, appleSize]) #Drawing square (apple) in the screen
@@ -86,7 +86,8 @@ while True:
     #Collision
     if (snakePos[0] == applePos[0] and snakePos[1] == applePos[1]):
         applePos = randomApplePos()
-        snakeBodySize += 1        
+        snakeBodySize += 1
+        FPS += 1
 
     pygame.time.Clock().tick(FPS) #Set FPS
     pygame.display.update() #Updating screen
